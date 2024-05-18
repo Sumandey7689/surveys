@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Loyalty</title>
+    <title>VMH GROUP'S</title>
     {{--
     <link rel="icon" type="image/x-icon" href="{{ asset('assets/') }}/img/MA2.ico"> --}}
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -77,6 +77,9 @@
     <script src="{{ asset('assets/') }}/js/datatables/buttons.print.min.js"></script>
     <script src="{{ asset('assets/admin') }}/js/ajaxsetup.js"></script>
 
+    <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
+
+
     <style>
         #pageheader {
             font-size: 1.5rem;
@@ -105,7 +108,7 @@
 
 @endphp
 
-<body class="hold-transition sidebar-mini layout-fixed modern-layout-ui ">
+<body class="hold-transition sidebar-mini layout-fixed modern-layout-ui " style="background-color: red">
     <div class="wrapper">
 
         <!-- Navbar -->
@@ -160,10 +163,9 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-1">
 
             <!-- Brand Logo -->
-            <a href="{{ url('/') }}dashboard" class="brand-link" style="height: 57px;">
-                <!-- <img src="{{ asset('assets/') }}/img/MA2.png" alt="Mumbai Anegls" class="brand-image"
-           style="opacity: .8"> -->
-                <span class="brand-text"><img src="{{ asset('assets/') }}/app-assets/images/logo/app-logo.png" alt=""></span>
+             <a href="{{ url('/') }}dashboard" class="brand-link">
+                <span class="brand-text"><span class="brand-text-start">Admin </span><span
+                        class="brand-text-end">Panel</span></span>
 
                 {{-- Admin Panel --}}
             </a>
@@ -255,7 +257,7 @@
         <!-- /.content-wrapper -->
         <footer class="main-footer">
             <strong>Copyright &copy;
-                <?php echo date('Y'); ?> <a href=#">Loyalty</a>
+                <?php echo date('Y'); ?> <a href=#">VHM GROUP'S</a>
             </strong>
             All rights reserved.
         </footer>

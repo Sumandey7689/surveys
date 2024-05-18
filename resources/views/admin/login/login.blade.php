@@ -2,7 +2,7 @@
 <html lang="zxx">
 
 <head>
-    <title>Loyalty | Login</title>
+    <title>VMH GROUP'S | Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <!-- External CSS libraries -->
@@ -87,26 +87,24 @@
                     <div class="info">
                         <div class="info-text">
                             <div class="waviy">
-                                <span style="--i:1; color: #fbca1a;">W</span>
-                                <span style="--i:2; color: #fbca1a;">e</span>
-                                <span style="--i:3; color: #fbca1a;">l</span>
-                                <span style="--i:4; color: #fbca1a;">c</span>
-                                <span style="--i:5; color: #fbca1a;">o</span>
-                                <span style="--i:6; color: #fbca1a;">m</span>
-                                <span style="--i:7; color: #fbca1a;">e</span>
-                                <span style="--i:8">t</span>
-                                <span style="--i:9">o</span>
-                                <span style="--i:10; color: #fbca1a;">L</span>
-                                <span style="--i:11; color: #fbca1a;">o</span>
-                                <span style="--i:12; color: #fbca1a;">y</span>
-                                <span style="--i:13; color: #fbca1a;">a</span>
-                                <span style="--i:14; color: #fbca1a;">l</span>
-                                <span style="--i:15; color: #fbca1a;">t</span>
-                                <span style="--i:16; color: #fbca1a;">y</span>
+                                <span style="--i:1; color: #fbca1a;">L</span>
+                                <span style="--i:2; color: #fbca1a;">O</span>
+                                <span style="--i:3; color: #fbca1a;">G</span>
+                                <span style="--i:4; color: #fbca1a;">I</span>
+                                <span style="--i:5; color: #fbca1a;">N</span>
+                                <span style="--i:6">t</span>
+                                <span style="--i:7">o</span>
+                                <span style="--i:8; color: #fbca1a;">V</span>
+                                <span style="--i:9; color: #fbca1a;">M</span>
+                                <span style="--i:10; color: #fbca1a;">H</span>
+                                <span style="--i:11; color: #fbca1a;">G</span>
+                                <span style="--i:12; color: #fbca1a;">R</span>
+                                <span style="--i:13; color: #fbca1a;">O</span>
+                                <span style="--i:14; color: #fbca1a;">U</span>
+                                <span style="--i:15; color: #fbca1a;">P</span>
+                                <span style="--i:16; color: #fbca1a;"></span>
                             </div>
-                            <p style="text-align: center; font-size: 15px;">Welcome to the Gainwell Samriddhi Club which
-                                is an exclusive Loyalty Rewards Programme introduced by Gainwell Commosales Private
-                                Limited (GCPL) for purchase of parts against 100% payment.</p>
+                            <p style="text-align: center; font-size: 15px;">Your login information is securely saved on our website. At VMH GROUP, we use advanced encryption and multi-factor authentication to ensure your data remains protected. Thank you for trusting us with your information.</p>
                         </div>
                     </div>
                 </div>

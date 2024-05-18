@@ -28,11 +28,6 @@ function enableButton(status, mode = 'Save') {
     if (status) {
         $("#savebtn").html("Processing...");
         $("#savebtn").prop("disabled", true);
-        $("#btnDiv1").removeClass("col-md-11");
-        $("#btnDiv1").addClass("col-md-10");
-        $("#btnDiv2").removeClass("col-md-1");
-        $("#btnDiv2").addClass("col-md-2");
-        $("#savebtn").css("margin-left", "15px");
     } else {
         if(mode == "Add") {
             var text = "Save";
@@ -40,12 +35,7 @@ function enableButton(status, mode = 'Save') {
             var text = "Update";
         }
         $("#savebtn").html(text);
-        $("#savebtn").css("margin-left", "0px");
         $("#savebtn").prop("disabled", false);
-        $("#btnDiv1").removeClass("col-md-10");
-        $("#btnDiv1").addClass("col-md-11");
-        $("#btnDiv2").removeClass("col-md-2");
-        $("#btnDiv2").addClass("col-md-1");
     }
 }
 

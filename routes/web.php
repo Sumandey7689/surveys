@@ -1,14 +1,12 @@
 <?php
 
-use App\Http\Controllers\Admin\CustomerController;
-use App\Http\Controllers\Admin\MasterController;
+use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\MenuController;
 use App\Http\Controllers\admin\UserController;
-use App\Http\Controllers\Web\HomeController;
-use App\Http\Controllers\Web\RegistrationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\URLController;
 use App\Models\Admin\Menu;
 use Illuminate\Support\Facades\Schema;
 
@@ -35,5 +33,13 @@ Route::prefix('admin')->middleware(['admin_auth'])->group(function () {
     Route::post('menupermission/assignMenu', [MenuController::class, 'assignMenu']);
     Route::post('user/change_password', [AdminLoginController::class, 'changePassword']);
     Route::post('menupermission/assignmenu', [MenuController::class, 'assignMenu']);
-
+    Route::post('log/{table}/{rowid}', [DashboardController::class, 'logActivity']);
+    
+    Route::get('client/addedit/{id?}', [ClientController::class, 'addEdit']);
+    Route::post('clientaddeditajax', [ClientController::class, 'addEditAction']);
+    Route::get('client/view/{id}', [ClientController::class, 'view']);
 });
+
+Route::get('redirects/c/{client_id}/complete', [URLController::class, 'completeAction']);
+Route::get('redirects/c/{client_id}/terminate', [URLController::class, 'terminateAction']);
+Route::get('redirects/c/{client_id}/quotafull', [URLController::class, 'quotafullAction']);

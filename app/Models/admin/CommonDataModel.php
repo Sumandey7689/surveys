@@ -25,6 +25,20 @@ class CommonDataModel extends Model
         }
     }
 
+    protected static function UpdateSingleTableData($table, $data, $where, $id = null)
+    {
+        try {
+            DB::beginTransaction();
+            DB::table($table)->where($where)->update($data);
+            DB::commit();
+            self::insertLogData($table, $data, $id, 'Update');
+            return true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            return 0;
+        }
+    }
+
 
     protected static function insertMultipleTableData($table, $data)
     {
