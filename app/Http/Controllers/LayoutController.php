@@ -10,8 +10,8 @@ class LayoutController extends Controller
 {
     public static function loadAdmin($data = [])
     {
-        $relativeUrl = substr(URL::current(), strlen(config('app.url') . 'admin/'));
-        $menu = Menu::where('route', $relativeUrl)->first();
+        $lastSlug = request()->segment(count(request()->segments()));
+        $menu = Menu::where('route', $lastSlug)->first();
         if ($menu) {
             $isUserAllowed = MenuPermission::where('menu_id', $menu->id)->where('user_id', session('surveysAdmin.userId'))->first();
             if (empty($isUserAllowed)) {

@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\MenuController;
 use App\Http\Controllers\admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
+use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\URLController;
 use App\Models\Admin\Menu;
 use Illuminate\Support\Facades\Schema;
@@ -38,6 +39,13 @@ Route::prefix('admin')->middleware(['admin_auth'])->group(function () {
     Route::get('client/addedit/{id?}', [ClientController::class, 'addEdit']);
     Route::post('clientaddeditajax', [ClientController::class, 'addEditAction']);
     Route::get('client/view/{id}', [ClientController::class, 'view']);
+    Route::post('client/status', [ClientController::class, 'status']);
+    
+    Route::get('project/addedit/{id?}', [ProjectController::class, 'addEdit']);
+    Route::post('projectaddeditajax', [ProjectController::class, 'addEditAction']);
+    Route::get('project/view/{id}', [ProjectController::class, 'view']);
+    Route::post('project/status', [ProjectController::class, 'status']);
+    Route::post('project/duplicate', [ProjectController::class, 'duplicate']);
 });
 
 Route::get('redirects/c/{client_id}/complete', [URLController::class, 'completeAction']);

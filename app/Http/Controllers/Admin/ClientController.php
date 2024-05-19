@@ -11,13 +11,15 @@ use Illuminate\Support\Facades\Validator;
 
 class ClientController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         $result["clientList"] = DB::table('client')->get();
         $body['bodyView'] = view('admin/client/client_list_view', $result);
         return LayoutController::loadAdmin($body);
     }
 
-    public function addEdit($id = "") {
+    public function addEdit($id = "")
+    {
         $data = LayoutController::addEditCommon($id, []);
         $data["editData"] = [];
 
@@ -29,7 +31,8 @@ class ClientController extends Controller
         return LayoutController::loadAdmin($body);
     }
 
-    public function addEditAction(Request $request) {
+    public function addEditAction(Request $request)
+    {
         $mode = $request->post('mode');
         $client_name = $request->post('client_name');
         $description = $request->post('description');
@@ -66,17 +69,27 @@ class ClientController extends Controller
                     'date' => now()
                 ];
 
-                
+
                 CommonDataModel::UpdateSingleTableData('client', $dataArray, ['id' => $id], $id);
                 return response()->json(['msg_status' => 1, 'data' => $id]);
-
             }
         }
     }
 
-    public function view ($id) {
+    public function view($id)
+    {
         $result["userData"] = DB::table('client')->where('id', $id)->first();
         $body['bodyView'] = view('admin/client/client_view', $result);
         return LayoutController::loadAdmin($body);
+    }
+
+    public function status(Request $request)
+    {
+        $id = $request->post('id');
+        $status = DB::table('client')->where(['id' => $id])->first();
+        $updatedStatus = $status->is_active == "Y" ? "N" : "Y";
+
+        CommonDataModel::UpdateSingleTableData('client', ['is_active' => $updatedStatus], ['id' => $id], $id);
+        return response()->json(['success' => true, 'status' => $updatedStatus, 'message' => 'Status updated successfully']);
     }
 }

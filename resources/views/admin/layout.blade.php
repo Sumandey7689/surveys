@@ -21,12 +21,10 @@
     <link rel="stylesheet" href="{{ asset('assets/') }}/css/bootstrap-select.css">
     <link rel="stylesheet" href="{{ asset('assets/') }}/plugins/sweetalert2/sweetalert2.min.css">
     <link rel="stylesheet" href="{{ asset('assets/') }}/plugins/toastr/toastr.min.css">
-    <link rel="stylesheet"
-        href="{{ asset('assets/') }}/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/') }}/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
     <!-- <link rel="stylesheet" href="{{ asset('assets/') }}/css/softhought_style.css"> -->
     <link rel="stylesheet" href="{{ asset('assets/') }}/plugins/select2/css/select2.min.css">
-    <link rel="stylesheet"
-        href="{{ asset('assets/') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/') }}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
     <link rel="stylesheet"
         href="{{ asset('assets/') }}/plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
     <!-- custome css  -->
@@ -54,8 +52,7 @@
     <script src="{{ asset('assets/') }}/plugins/select2/js/select2.full.min.js"></script>
     <script src="{{ asset('assets/') }}/plugins/moment/moment.min.js"></script>
     <script src="{{ asset('assets/') }}/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
-    <script
-        src="{{ asset('assets/') }}/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+    <script src="{{ asset('assets/') }}/plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
     <script src="{{ asset('assets/') }}/plugins/datatables/jquery.dataTables.js"></script>
     <script src="{{ asset('assets/') }}/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
     <script src="{{ asset('assets/') }}/plugins/datatables/dataTables.keyTable.min.js"></script>
@@ -79,6 +76,7 @@
 
     <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 
+   
 
     <style>
         #pageheader {
@@ -103,8 +101,7 @@
 @php
     use App\Http\Controllers\admin\DashboardController;
 
-  //  $accYear = DashboardController::accYear();
-
+    //  $accYear = DashboardController::accYear();
 
 @endphp
 
@@ -163,7 +160,7 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-1">
 
             <!-- Brand Logo -->
-             <a href="{{ url('/') }}dashboard" class="brand-link">
+            <a href="{{ url('/') }}dashboard" class="brand-link">
                 <span class="brand-text"><span class="brand-text-start">Admin </span><span
                         class="brand-text-end">Panel</span></span>
 
@@ -186,8 +183,8 @@
                         data-accordion="false">
 
                         @php
-                        // $userId = session()->get('ADMIN_ID');
-                        $userId = 1;
+                            // $userId = session()->get('ADMIN_ID');
+                            $userId = 1;
                         @endphp
                         {!! getTopNavCat($userId) !!}
 
@@ -295,3 +292,26 @@
 
     </div>
 </div>
+
+
+<script>
+    document.querySelectorAll('.copy-icon').forEach(item => {
+        item.addEventListener('click', event => {
+            const link = item.previousElementSibling;
+            copyToClipboard(link.href);
+        });
+    });
+
+    function copyToClipboard(text) {
+        const input = document.createElement('input');
+        input.style.position = 'fixed';
+        input.style.opacity = 0;
+        input.value = text;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showToast('success', 'Link copied to clipboard');
+    }
+</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

@@ -6,8 +6,8 @@
 <section class="layout-box-content-format1">
     <div class="card card-primary list-view">
         <div class="card-header box-shdw">
-            <h3 class="card-title">Client List</h3>
-            <x-button-component title='<i class="fas fa-plus"></i> Add' url="{{ url('admin/') }}/client/addedit" />
+            <h3 class="card-title">Projects List</h3>
+            <x-button-component title='<i class="fas fa-plus"></i> Add' url="{{ url('admin/') }}/project/addedit" />
         </div>
         <div class="card-body">
             <div class="formblock-box">
@@ -16,45 +16,42 @@
                         <thead>
                             <tr>
                                 <th>Sl No.</th>
-                                <th>Client name</th>
+                                <th>Project Name</th>
+                                <th>Client</th>
+                                <th>PID</th>
+                                <th>CPI</th>
+                                <th>Completes</th>
+                                <th>Terminates</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($clientList as $key => $client)
+                            @foreach ($projectsList as $key => $project)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ $client->client_name }}</td>
-                                    <td style="text-align: center;">
-                                        @if ($client->is_active == 'Y')
-                                            <span class="client-status" data-id="{{ $client->id }}">
-                                                <i class="fas fa-check-circle"
-                                                    style="font-size: 16px; cursor:pointer; color:green;"></i>
-                                            </span>
-                                        @else
-                                            <span class="client-status" data-id="{{ $client->id }}">
-                                                <i class="fa fa-times-circle"
-                                                    style="font-size: 16px; cursor:pointer; color:red;"></i>
-                                            </span>
-                                        @endif
-                                    </td>
+                                    <td>{{ $project->name }}</td>
+                                    <td>{{ $project->client_name }}</td>
+                                    <td>{{ $project->project_id }}</td>
+                                    <td><span class="{{ $project->status }}-status">{{ $project->status }}</span></td>
+                                    <td>{{ $project->cost_per_complete }}</td>
+                                    <td>{{ 0 }}</td>
+                                    <td>{{ 0 }}</td>
                                     <td>
                                         <table>
                                             <tr>
                                                 <td>
                                                     <x-edit-button-component title='<i class="fas fa-edit"></i>'
-                                                        url="{{ url('admin/client/addedit') }}/{{ $client->id }}" />
+                                                        url="{{ url('admin/project/addedit') }}/{{ $project->id }}" />
                                                 </td>
                                                 <td>
                                                     <x-edit-button-component title='<i class="fas fa-eye"></i>'
-                                                        url="{{ url('admin/client/view/') }}/{{ $client->id }}" />
+                                                        url="{{ url('admin/project/view/') }}/{{ $project->id }}" />
 
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
-
                                 </tr>
                             @endforeach
                         </tbody>
@@ -64,5 +61,3 @@
         </div>
     </div>
 </section>
-
-<script src="{{ asset('assets/admin/') }}/js/client.js"></script>

@@ -22,9 +22,9 @@
                     <div class="card-body">
                         <div class="formblock-box">
                             @csrf
-                            <input type="hidden" name="mode" id="mode" value="{{ $mode }}">
+                            <input type="hidden" name="mode" id="mode" value="{{ $mode }}" />
                             <input type="hidden" name="id" id="id"
-                                value="{{ $editData ? $editData->id : '' }}">
+                                value="{{ $editData ? $editData->id : '' }}" />
 
                             <div class="row p-2">
                                 <div class="col-md-12">
@@ -32,7 +32,7 @@
                                         <label for="" class="form-label">Client name</label>
                                         <input class="form-control" type="text" id="client_name" name="client_name"
                                             placeholder="Enter Client Name"
-                                            value="{{ $editData ? $editData->client_name : '' }}">
+                                            value="{{ $editData ? $editData->client_name : '' }}" />
                                         <div id="client_name_error" class="invalid-feedback d-block error-text"></div>
                                     </div>
                                 </div>
@@ -54,9 +54,8 @@
                                 </div>
 
                                 <span id="sussess_msg" style="padding: 5px;color: #0b6c0b;font-weight: bold;"></span>
-                            </div><!-- /.card-body -->
-                            <div id="emi_details"></div>
-                        </div><!-- /.card -->
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

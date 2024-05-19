@@ -1,6 +1,38 @@
 $(function () {
     var base_url = $("#base_url").val();
 
+    $(".client-status").click(function (e) {
+        e.preventDefault();
+        var id = $(this).data("id");
+        var icon = $(this).find("i");
+        var urlpath = base_url + "/admin/client/status";
+        var csrfToken = $('meta[name="csrf-token"]').attr("content");
+
+        $.ajax({
+            type: "POST",
+            url: urlpath,
+            data: { id: id },
+            headers: {
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            success: function (response) {
+                if (response.status === "Y") {
+                    icon.removeClass("fa-times-circle")
+                        .addClass("fa-check-circle")
+                        .css("color", "green");
+                } else {
+                    icon.removeClass("fa-check-circle")
+                        .addClass("fa-times-circle")
+                        .css("color", "red");
+                }
+                showToast('success', response.message)
+            },
+            error: function (xhr, status, error) {
+                console.error("Error updating question status:", error);
+            },
+        });
+    });
+
     $(document).on("submit", "#clientForm", function (e) {
         e.preventDefault();
 
