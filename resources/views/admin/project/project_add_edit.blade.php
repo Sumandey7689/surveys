@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="card card-primary list-view">
                 <div class="card-header box-shdw">
-                    <h3 class="card-title">Client</h3>
+                    <h3 class="card-title">Project</h3>
                     <x-button-component title='<i class="fas fa-list"></i> List' url="{{ url('admin/') }}/projects" />
                     @if ($mode == 'Edit')
                         <x-button-component title='<i class="fas fa-history"></i> LOG' mclass="openModal" mtitle="LOG"

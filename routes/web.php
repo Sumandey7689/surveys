@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\URLController;
+use App\Http\Controllers\Admin\VendorController;
 use App\Models\Admin\Menu;
 use Illuminate\Support\Facades\Schema;
 
@@ -46,6 +47,11 @@ Route::prefix('admin')->middleware(['admin_auth'])->group(function () {
     Route::get('project/view/{id}', [ProjectController::class, 'view']);
     Route::post('project/status', [ProjectController::class, 'status']);
     Route::post('project/duplicate', [ProjectController::class, 'duplicate']);
+
+    Route::get('vendor/addedit/{id?}', [VendorController::class, 'addEdit']);
+    Route::post('vendoraddeditajax', [VendorController::class, 'addEditAction']);
+    Route::get('vendor/view/{id}', [VendorController::class, 'view']);
+    Route::post('vendor/status', [VendorController::class, 'status']);
 });
 
 Route::get('redirects/c/{client_id}/complete', [URLController::class, 'completeAction']);
