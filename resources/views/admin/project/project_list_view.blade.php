@@ -19,10 +19,10 @@
                                 <th>Project Name</th>
                                 <th>Client</th>
                                 <th>PID</th>
+                                <th class="text-center">Status</th>
                                 <th>CPI</th>
                                 <th>Completes</th>
                                 <th>Terminates</th>
-                                <th class="text-center">Status</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -35,8 +35,8 @@
                                     <td>{{ $project->project_id }}</td>
                                     <td><span class="{{ $project->status }}-status">{{ $project->status }}</span></td>
                                     <td>{{ $project->cost_per_complete }}</td>
-                                    <td>{{ 0 }}</td>
-                                    <td>{{ 0 }}</td>
+                                    <td>{{ $project->complete_count ?? 0 }}</td>
+                                    <td>{{ $project->terminates_count ?? 0 }}</td>
                                     <td>
                                         <table>
                                             <tr>

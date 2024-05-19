@@ -47,6 +47,9 @@ Route::prefix('admin')->middleware(['admin_auth'])->group(function () {
     Route::get('project/view/{id}', [ProjectController::class, 'view']);
     Route::post('project/status', [ProjectController::class, 'status']);
     Route::post('project/duplicate', [ProjectController::class, 'duplicate']);
+    Route::get('vendordropdownajax', [ProjectController::class, 'vendorList']);
+    Route::post('vendorassignajax', [ProjectController::class, 'assignVendor']);
+    Route::post('loadvendorlistajax', [ProjectController::class, 'vendorListPartialView']);
 
     Route::get('vendor/addedit/{id?}', [VendorController::class, 'addEdit']);
     Route::post('vendoraddeditajax', [VendorController::class, 'addEditAction']);

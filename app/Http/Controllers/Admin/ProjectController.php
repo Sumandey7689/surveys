@@ -17,7 +17,12 @@ class ProjectController extends Controller
     {
         $result["projectsList"] = DB::table('projects')
             ->join('client', 'client.id', '=', 'projects.client_id')
-            ->select('projects.*', 'client.client_name')->get();
+            ->leftJoin('vendor', 'vendor.project_id', '=', 'projects.id')
+            ->select('projects.*', 'client.client_name', DB::raw('SUM(vendor.complete_count) as complete_count, SUM(vendor.terminates_count) as terminates_count'))
+            ->groupBy('projects.id', 'projects.project_id', 'projects.client_id', 'projects.name', 'projects.description', 'projects.cost_per_complete', 'projects.max_limit', 'projects.live_url', 'projects.status', 'projects.date', 'client.client_name')
+            ->orderBy('projects.id', 'DESC')
+            ->get();
+
 
         $body['bodyView'] = view('admin/project/project_list_view', $result);
         return LayoutController::loadAdmin($body);
@@ -55,7 +60,7 @@ class ProjectController extends Controller
             'live_url' => ['required', 'url', new URLRules],
             'description' => 'required',
         ], [
-            'cost_per_complete' => 'CPI field required'
+            'cost_per_complete.required' => 'CPI field required'
         ]);
 
         if ($validator->fails()) {
@@ -96,7 +101,14 @@ class ProjectController extends Controller
 
     public function view($id)
     {
-        $result["projectsData"] = DB::table('projects')->join('client', 'client.id', '=', 'projects.client_id')->where('projects.id', $id)->select('projects.*', 'client.client_name', 'client.id as client_self_id')->first();
+        $result["projectsData"] = DB::table('projects')
+            ->join('client', 'client.id', '=', 'projects.client_id')
+            ->leftJoin('vendor', 'vendor.project_id', '=', 'projects.id')
+            ->select('projects.*', 'client.client_name', DB::raw('SUM(vendor.complete_count) as complete_count, SUM(vendor.terminates_count) as terminates_count, SUM(vendor.clicks_count) as clicks_count'))
+            ->groupBy('projects.id', 'projects.project_id', 'projects.client_id', 'projects.name', 'projects.description', 'projects.cost_per_complete', 'projects.max_limit', 'projects.live_url', 'projects.status', 'projects.date', 'client.client_name')
+            ->where('projects.id', $id)
+            ->first();
+
         $body['bodyView'] = view('admin/project/project_view', $result);
         return LayoutController::loadAdmin($body);
     }
@@ -111,7 +123,8 @@ class ProjectController extends Controller
         return response()->json(['success' => true, 'status' => $updatedStatus, 'message' => 'Status updated successfully']);
     }
 
-    public function duplicate(Request $request) {
+    public function duplicate(Request $request)
+    {
         $id = $request->post('id');
         $projectData = DB::table('projects')->where(['id' => $id])->first();
         if ($projectData) {
@@ -127,5 +140,56 @@ class ProjectController extends Controller
             return response()->json(['status' => true, 'insertedid' => $insertedId]);
         }
         return response()->json(['status' => false]);
+    }
+
+    public function vendorListPartialView(Request $request) {
+        $project_id = $request->post('project_id');
+        $result["assignedVendorList"] = DB::table('vendor')->where(['is_active' => 'Y', 'project_id' => $project_id])->get();
+        $result['projectsData'] = DB::table('projects')->where('id', $project_id)->first();
+        return view('admin/project/vendor_list_partial_view', $result)->render();
+    }
+
+    public function vendorList()
+    {
+        $vendorList = DB::table('vendor')->where(['is_active' => 'Y'])->whereNull('project_id')->whereNull('client_id')->get();
+        return response()->json(['vendorList' => $vendorList]);
+    }
+
+    public function assignVendor(Request $request)
+    {
+        $assignVendor = $request->post('assign_vendor_id');
+        $project_id = $request->post('project_id');
+        $project_unique_id = $request->post('project_unique_id');
+        $client_id = $request->post('client_id');
+
+        $validator = Validator::make($request->all(), [
+            'assign_vendor_id' => 'required',
+        ], [
+            'assign_vendor_id.required' => 'Vendor field required'
+        ]);
+
+        if ($validator->fails()) {
+            $error = $validator->errors();
+            return response()->json(['status' => false, 'errors' => $error]);
+        } else {
+            foreach ($assignVendor as $vendorId) {
+                $dataArr = [
+                    'project_id' => $project_id,
+                    'client_id' => $client_id,
+                    'entry_link' => 'vendor/auth/' . $vendorId . '/' . 'project/' . $project_unique_id . '?user=xxxx'
+                ];
+
+                $paymentDataArr = [
+                    'payment_id' => SerialMaster::generateSerialNumber('PAYMENT'),
+                    'project_id' => $project_id,
+                    'vendor_id' => $vendorId
+                ];
+
+                CommonDataModel::UpdateSingleTableData('vendor', $dataArr, ['id' => $vendorId], $vendorId);
+                CommonDataModel::insertSingleTableData('payments', $paymentDataArr);
+            }
+
+            return response()->json(['status' => true]);
+        }
     }
 }

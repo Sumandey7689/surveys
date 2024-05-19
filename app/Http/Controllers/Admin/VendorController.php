@@ -14,7 +14,7 @@ class VendorController extends Controller
 {
     public function index()
     {
-        $result["vendorList"] = DB::table('vendor')->get();
+        $result["vendorList"] = DB::table('vendor')->orderByDesc('id')->get();
         $body['bodyView'] = view('admin/vendor/vendor_list_view', $result);
         return LayoutController::loadAdmin($body);
     }

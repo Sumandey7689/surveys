@@ -76,7 +76,7 @@
 
     <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 
-   
+
 
     <style>
         #pageheader {
@@ -295,23 +295,20 @@
 
 
 <script>
-    document.querySelectorAll('.copy-icon').forEach(item => {
-        item.addEventListener('click', event => {
-            const link = item.previousElementSibling;
-            copyToClipboard(link.href);
-        });
+    $(document).on('click', '.copy-icon', function() {
+        const link = $(this).prev('a');
+        copyToClipboard(link.attr('href'));
     });
 
     function copyToClipboard(text) {
-        const input = document.createElement('input');
-        input.style.position = 'fixed';
-        input.style.opacity = 0;
-        input.value = text;
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
-        showToast('success', 'Link copied to clipboard');
+        navigator.clipboard.writeText(text)
+        .then(function() {
+            showToast('success', 'Link copied to clipboard');
+        })
+        .catch(function(error) {
+            console.error('Unable to copy to clipboard:', error);
+            showToast('error', 'Failed to copy link to clipboard');
+        });
     }
 </script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

@@ -13,7 +13,7 @@ class ClientController extends Controller
 {
     public function index()
     {
-        $result["clientList"] = DB::table('client')->get();
+        $result["clientList"] = DB::table('client')->orderByDesc('id')->get();
         $body['bodyView'] = view('admin/client/client_list_view', $result);
         return LayoutController::loadAdmin($body);
     }
