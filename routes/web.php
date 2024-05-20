@@ -60,3 +60,5 @@ Route::prefix('admin')->middleware(['admin_auth'])->group(function () {
 Route::get('redirects/c/{client_id}/complete', [URLController::class, 'completeAction']);
 Route::get('redirects/c/{client_id}/terminate', [URLController::class, 'terminateAction']);
 Route::get('redirects/c/{client_id}/quotafull', [URLController::class, 'quotafullAction']);
+
+Route::get('vendor/auth/{vendor_id}/project/{project_id}', [URLController::class, 'URLAction']); 

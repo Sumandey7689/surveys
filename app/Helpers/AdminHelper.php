@@ -26,7 +26,7 @@ function generateMenuHtml($menus, $level)
             $html .= generateMenuHtml($item['children'], 1);
         } else {
             $url = "/admin/" . $item['route'];
-            if ($item['route'] && !empty(MenuPermission::where(['menu_id' => $item['id']])->first()) ){
+            if ($item['route'] && !empty(MenuPermission::where(['menu_id' => $item['id'], 'user_id' => session('surveysAdmin.userId')])->first()) ){
                 $html .= '<li class="nav-item ' . $isActive . '"><a class="nav-link ' . $isActive . '" href="' . $url . '"> ' . $item['icon'] . '<p>' . $item['name'] . '</p></a>';
             }
         }

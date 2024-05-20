@@ -3,7 +3,7 @@
         <label for="{{ $id }}" class="form-label">{{ $label }}</label>
         <div class="picture {{ $class }}">
             <img src="{{ $value }}" class="picture-src" id="{{ $imagePreview }}" title="">           
-            <input type="file" id="{{ $id }}" name="{{ $name }}" class="readUrl" data-showImage="{{ $imagePreview }}">
+            <input type="file" id="{{ $id }}" name="{{ $name }}" class="readUrl" data-showImage="{{ $imagePreview }}" disabled>
             <div class="upload-text mt-2">
                 <i class="fas fa-cloud-upload-alt"></i><br>
                 <span class="note needsclick fs-14">Upload Image </span>

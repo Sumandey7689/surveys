@@ -48,8 +48,8 @@ $(function () {
                             $("#role_id").val("").change();
                         } else {
                             $("#successmsg").text(response.msg_data);
-                            $("#commonModal").modal("hide");
                         }
+                        $("#commonModal").modal("hide");
                         refreshData(base_url + "/admin/user");
                     }
                 },

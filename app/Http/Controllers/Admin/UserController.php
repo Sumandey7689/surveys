@@ -91,27 +91,25 @@ class UserController extends Controller
                         $user_id = $model->id;
                         $allmenus = Menu::select('id')->get();
                         foreach ($allmenus as $menus) {
-                            $permission = new MenuPermission();
-                            $permission->user_id = $user_id;
-                            $permission->menu_id = $menus->id;
-                            $permission->save();
+                            if ($menus->id == 1 || $menus->id == 2 || $menus->id == 5) {
+                                $permission = new MenuPermission();
+                                $permission->user_id = $user_id;
+                                $permission->menu_id = $menus->id;
+                                $permission->save();
+                            }
                         }
                     }
                 }
 
                 DB::commit();
                 return response()->json(['errors' => [], 'msg_status' => 1, 'msg_data' => $msg]);
-
             } catch (\Exception $e) {
                 DB::rollback();
                 $error = $e->getMessage();
                 $msg = 'Refresh your page,Try Again';
                 return response()->json(['msg_status' => 2, 'msg_data' => $error]);
             }
-
         }
-
-
     }
 
     public function status(Request $request, $status, $id)

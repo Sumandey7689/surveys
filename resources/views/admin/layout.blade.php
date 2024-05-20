@@ -184,7 +184,7 @@
 
                         @php
                             // $userId = session()->get('ADMIN_ID');
-                            $userId = 1;
+                            $userId = session('surveysAdmin.userId');
                         @endphp
                         {!! getTopNavCat($userId) !!}
 
