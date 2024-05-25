@@ -83,14 +83,55 @@ body {
 }
 
 .Pause-status {
-  color: white;
-  background-color: orange;
-  font-weight: bold;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+    color: white;
+    background-color: orange;
+    font-weight: bold;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
+
+.Pending-status {
+    color: white;
+    background-color: blue; /* Adjust color as needed */
+    font-weight: bold;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.Complete-status {
+    color: white;
+    background-color: green; /* Adjust color as needed */
+    font-weight: bold;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.Terminates-status {
+    color: white;
+    background-color: red; /* Adjust color as needed */
+    font-weight: bold;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.QuotaFull-status {
+    color: white;
+    background-color: gray; /* Adjust color as needed */
+    font-weight: bold;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
 
 .brand-text {
     text-transform: uppercase;
