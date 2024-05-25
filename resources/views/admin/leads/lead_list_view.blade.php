@@ -26,8 +26,9 @@
                     <table class="table customTbl table-bordered table-hover dataTable dataContainer table-striped">
                         <thead>
                             <tr>
+                                <th style="display: none;"></th>
                                 <th>Id</th>
-                                {{-- <th>Project Id</th> --}}
+                                <th>Project Id</th>
                                 <th>Project Name</th>
                                 <th>Client</th>
                                 <th>Vendor</th>
@@ -41,13 +42,14 @@
                         <tbody>
                             @foreach ($leadList as $key => $lead)
                                 <tr>
+                                    <td style="display: none;"></td>
                                     <td>{{ $lead->id }}</td>
-                                    {{-- <td>{{ $lead->project_id }}</td> --}}
+                                    <td>{{ $lead->project_id }}</td>
                                     <td>{{ $lead->project_name }}</td>
                                     <td>{{ $lead->client_name }}</td>
-                                    <td><a href="{{ url('/') }}/admin/vendor/view/{{ $lead->id }}"
+                                    <td><a href="{{ url('/') }}/admin/vendor/view/{{ $lead->vid }}"
                                             target="_blank">{{ $lead->vendor_email }}</a></td>
-                                    <td>$ {{ $lead->cpi }}</td>
+                                    <td><strong>${{ $lead->cpi }}</strong></td>
                                     <td><span
                                             class="text-center {{ str_replace(' ', '', $lead->status) }}-status">{{ $lead->status }}</span>
                                     </td>

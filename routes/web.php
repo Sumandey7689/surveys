@@ -6,6 +6,7 @@ use App\Http\Controllers\admin\MenuController;
 use App\Http\Controllers\admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
+use App\Http\Controllers\Admin\PaymentsController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\URLController;
 use App\Http\Controllers\Admin\VendorController;
@@ -55,6 +56,8 @@ Route::prefix('admin')->middleware(['admin_auth'])->group(function () {
     Route::post('vendoraddeditajax', [VendorController::class, 'addEditAction']);
     Route::get('vendor/view/{id}', [VendorController::class, 'view']);
     Route::post('vendor/status', [VendorController::class, 'status']);
+
+    Route::post('paymentstatusajax', [PaymentsController::class, 'status']);
 });
 
 Route::get('redirects/c/{client_id}/complete', [URLController::class, 'completeAction']);

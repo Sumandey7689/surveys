@@ -25,8 +25,18 @@ class URLController extends Controller
         }
 
         if ($leadsInfo->status == "Pending") {
+
             CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Complete', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
             $vendorInfo = DB::table('vendor')->where('id', $leadsInfo->vendor_id)->first();
+
+            $paymentInfo = DB::table('payments')
+                ->join('projects', 'projects.id', '=', 'payments.project_id')
+                ->where(['payments.vendor_id' => $vendorInfo->id, 'payments.project_id' => $vendorInfo->project_id])
+                ->select('payments.*', 'projects.cost_per_complete as cpi')
+                ->orderByDesc('payments.id')
+                ->first();
+
+            CommonDataModel::UpdateSingleTableData('payments', ['amount' => $paymentInfo->amount + $paymentInfo->cpi], ['vendor_id' => $vendorInfo->id, 'project_id' => $vendorInfo->project_id], $paymentInfo->id);
             CommonDataModel::UpdateSingleTableData('vendor', ['complete_count' => $vendorInfo->complete_count + 1], ['id' => $vendorInfo->id]);
         }
         return view('admin/url/complete', []);
@@ -84,7 +94,7 @@ class URLController extends Controller
         $projectsInfo = DB::table('projects')->where(['project_id' => $projectId, 'status' => 'Live'])->first();
         $vendorInfo = DB::table('vendor')->where(['id' => $vendorId, 'is_active' => 'Y'])->first();
 
-        if (empty($projectsInfo) || empty($vendorInfo) ) {
+        if (empty($projectsInfo) || empty($vendorInfo)) {
             return view('admin/url/inactive', []);
         }
 
