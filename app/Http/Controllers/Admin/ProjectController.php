@@ -142,7 +142,8 @@ class ProjectController extends Controller
         return response()->json(['status' => false]);
     }
 
-    public function vendorListPartialView(Request $request) {
+    public function vendorListPartialView(Request $request)
+    {
         $project_id = $request->post('project_id');
         $result["assignedVendorList"] = DB::table('vendor')->where(['is_active' => 'Y', 'project_id' => $project_id])->get();
         $result['projectsData'] = DB::table('projects')->where('id', $project_id)->first();
@@ -185,8 +186,18 @@ class ProjectController extends Controller
                     'vendor_id' => $vendorId
                 ];
 
+
                 CommonDataModel::UpdateSingleTableData('vendor', $dataArr, ['id' => $vendorId], $vendorId);
                 CommonDataModel::insertSingleTableData('payments', $paymentDataArr);
+
+                $result["mailData"] = DB::table('vendor')
+                    ->join('projects', 'vendor.project_id', '=', 'projects.id')
+                    ->join('client', 'client.id', '=', 'vendor.client_id')
+                    ->where('vendor.id', $vendorId)
+                    ->select('vendor.*', 'projects.project_id', 'client.client_id', 'projects.name as project_name', 'projects.cost_per_complete as cpi')
+                    ->first();
+
+                sendEmail($result['mailData']->email, $result['mailData']->project_id . " Project Assigned Successfully!", view('admin/mail/vendor_assign', $result));
             }
 
             return response()->json(['status' => true]);

@@ -49,7 +49,6 @@ class URLController extends Controller
 
         $user = $request->get('user');
         $userInfo = $this->getUserInfo($request);
-
         return view('admin/redirect', []);
     }
 

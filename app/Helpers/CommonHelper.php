@@ -45,41 +45,10 @@ if (!function_exists('date_dmy_to_ymd')) {
     }
 }
 
-// if (!function_exists('sendEmail')) {
-//     function sendEmail($to, $subject, $content, $data = [], $cc = [], $bcc = [], $attachments = [])
-//     {
-//         try {
-//             Mail::send([], $data, function (Message $message) use ($to, $subject, $content, $cc, $bcc, $attachments) {
-//                 $message->to($to)
-//                     ->subject($subject)
-//                     ->setBody($content, 'text/html');
-//                 if (!empty ($cc)) {
-//                     $message->cc($cc);
-//                 }
-
-//                 if (!empty ($bcc)) {
-//                     $message->bcc($bcc);
-//                 }
-
-//                 foreach ($attachments as $attachment) {
-//                     $message->attach($attachment);
-//                 }
-
-//             });
-
-//             return true;
-
-//         } catch (\Exception $e) {
-//             return $e;
-//         }
-//     }
-// }
-
 if (!function_exists('sendEmail')) {
     function sendEmail($to, $subject, $content, $data = [], $cc = [], $bcc = [], $attachments = [])
     {
         try {
-            // Render the view content to a string if necessary
             if ($content instanceof Illuminate\View\View) {
                 $content = $content->render();
             } elseif (is_string($content)) {
@@ -90,20 +59,16 @@ if (!function_exists('sendEmail')) {
                 $message->to($to)
                         ->subject($subject);
 
-                // Set the body content as HTML
-                $message->html($content); // For HTML content
+                $message->html($content); 
 
-                // Add CC recipients if any
                 if (!empty($cc)) {
                     $message->cc($cc);
                 }
 
-                // Add BCC recipients if any
                 if (!empty($bcc)) {
                     $message->bcc($bcc);
                 }
 
-                // Attach files if any
                 foreach ($attachments as $attachment) {
                     $message->attach($attachment);
                 }
@@ -111,7 +76,7 @@ if (!function_exists('sendEmail')) {
 
             return true;
         } catch (\Exception $e) {
-            return $e->getMessage(); // Return the exception message for debugging
+            return $e->getMessage();
         }
     }
 }
