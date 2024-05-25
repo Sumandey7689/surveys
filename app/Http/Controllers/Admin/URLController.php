@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\admin\CommonDataModel;
+use App\Models\admin\Projects;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Jenssegers\Agent\Agent;
 
 class URLController extends Controller
@@ -14,9 +17,19 @@ class URLController extends Controller
             abort(404);
         }
 
+        $clientInfo = DB::table('client')->where('client_id', $clientId)->first();
         $username = $request->get('username');
+        $leadsInfo = DB::table('leads')->where('id', $username)->first();
+        if (empty($clientInfo) || empty($leadsInfo)) {
+            abort(404);
+        }
 
-        echo $clientId . " " . $username;
+        if ($leadsInfo->status == "Pending") {
+            CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Complete', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
+            $vendorInfo = DB::table('vendor')->where('id', $leadsInfo->vendor_id)->first();
+            CommonDataModel::UpdateSingleTableData('vendor', ['complete_count' => $vendorInfo->complete_count + 1], ['id' => $vendorInfo->id]);
+        }
+        return view('admin/url/complete', []);
     }
 
     public function terminateAction(Request $request, $clientId)
@@ -25,9 +38,19 @@ class URLController extends Controller
             abort(404);
         }
 
+        $clientInfo = DB::table('client')->where('client_id', $clientId)->first();
         $username = $request->get('username');
+        $leadsInfo = DB::table('leads')->where('id', $username)->first();
+        if (empty($clientInfo) || empty($leadsInfo)) {
+            abort(404);
+        }
 
-        echo $clientId . " " . $username;
+        if ($leadsInfo->status == "Pending") {
+            CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Terminates', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
+            $vendorInfo = DB::table('vendor')->where('id', $leadsInfo->vendor_id)->first();
+            CommonDataModel::UpdateSingleTableData('vendor', ['terminates_count' => $vendorInfo->terminates_count + 1], ['id' => $vendorInfo->id]);
+        }
+        return view('admin/url/terminates', []);
     }
 
     public function quotafullAction(Request $request, $clientId)
@@ -36,9 +59,17 @@ class URLController extends Controller
             abort(404);
         }
 
+        $clientInfo = DB::table('client')->where('client_id', $clientId)->first();
         $username = $request->get('username');
+        $leadsInfo = DB::table('leads')->where('id', $username)->first();
+        if (empty($clientInfo) || empty($leadsInfo)) {
+            abort(404);
+        }
 
-        echo $clientId . " " . $username;
+        if ($leadsInfo->status == "Pending") {
+            CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Quota Full', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
+        }
+        return view('admin/url/quotafull', []);
     }
 
     public function URLAction(Request $request, $vendorId, $projectId)
@@ -47,9 +78,32 @@ class URLController extends Controller
             abort(404);
         }
 
-        $user = $request->get('user');
+        $userId = $request->get('user');
         $userInfo = $this->getUserInfo($request);
-        return view('admin/redirect', []);
+
+        $projectsInfo = DB::table('projects')->where(['project_id' => $projectId, 'status' => 'Live'])->first();
+        $vendorInfo = DB::table('vendor')->where(['id' => $vendorId, 'is_active' => 'Y'])->first();
+
+        if (empty($projectsInfo) || empty($vendorInfo) ) {
+            return view('admin/url/inactive', []);
+        }
+
+        $isMaxQuotaReached = Projects::getEventCounts($projectsInfo->id);
+
+        if ($isMaxQuotaReached->complete_count > $isMaxQuotaReached->max_limit) {
+            return view('admin/url/quotafull', []);
+        }
+
+        $existingLeads = DB::table('leads')->where(['project_id' => $projectsInfo->id, 'uid' => $userId, 'vendor_id' => $vendorId])->orderByDesc('id')->first();
+        if (empty($existingLeads) || json_decode($existingLeads->user_info)->ip_address != $userInfo['ip_address']) {
+            $insertedLeadsId = CommonDataModel::insertSingleTableData('leads', ['project_id' => $projectsInfo->id, 'vendor_id' => $vendorInfo->id, 'uid' => $userId, 'user_info' => json_encode($userInfo), 'date' => now()]);
+            DB::table('vendor')->where('id', $vendorId)->update(['clicks_count' => $vendorInfo->clicks_count + 1]);
+        } else {
+            $insertedLeadsId = $existingLeads->id;
+        }
+
+        $result['liveRedirectUrl'] = $projectsInfo->live_url . $insertedLeadsId;
+        return view('admin/url/redirect', $result);
     }
 
 

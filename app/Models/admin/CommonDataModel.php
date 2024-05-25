@@ -31,7 +31,9 @@ class CommonDataModel extends Model
             DB::beginTransaction();
             DB::table($table)->where($where)->update($data);
             DB::commit();
-            self::insertLogData($table, $data, $id, 'Update');
+            if ($id != null) {
+                self::insertLogData($table, $data, $id, 'Update');
+            }
             return true;
         } catch (\Exception $e) {
             DB::rollback();

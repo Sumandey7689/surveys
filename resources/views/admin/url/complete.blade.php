@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intermediary Page</title>
+    <title>VHM Groups - Success</title>
     <style>
         * {
             margin: 0;
@@ -27,8 +27,7 @@
             border: 1px solid #e6e6e6;
             border-radius: 4px;
             padding: 30px;
-            width: 90%;
-            max-width: 600px;
+            width: 85%;
             background-color: #fff;
         }
 
@@ -51,11 +50,6 @@
             font-weight: 400;
             line-height: 1.5;
             margin: 10px 0;
-        }
-
-        .logos img {
-            vertical-align: middle;
-            margin: 20px 10px;
         }
 
         .redirect-message {
@@ -82,11 +76,6 @@
                 font-size: 14px;
             }
 
-            .logos img {
-                width: 90px;
-                margin: 15px 5px;
-            }
-
             .redirect-message {
                 font-size: 11px;
                 margin-top: 15px;
@@ -98,23 +87,19 @@
 
 <body>
     <div class="container">
-        <img src="https://asset20.ckassets.com/wp/wp-content/themes/CashKaro_WP/img/redirect_unsign.png" alt="Redirect">
-        <div class="header">Thank You For Agreeing To Participate In Our Survey</div>
-        <div class="subheader">Your Opinions Are Important To Us, Kindly Provide Honest And Thoughtful Responses For Each
-            Question In Order To Make Your Participation Count.</div>
-        <div class="subheader">Your Responses Will Be Kept Confidential And Will Be Used In Aggregate Only.</div>
-        <div class="logos">
-            <img src="https://asset20.ckassets.com/wp/wp-content/themes/CashKaro_WP/img/logo_intermediary.png"
-                alt="CashKaro Logo">
-            <img src="{{ asset('/assets/img/intermediary_animation.gif') }}"
-                alt="Loading">
-            <img src="https://asset20.ckassets.com/resources/image/stores/flipkart.png" alt="Flipkart">
+        <div class="row">
+            <div class="col-md-12">
+                <img src="{{ asset('/assets/img/vhm.png') }}" alt="VHM Groups" style="height: 55px; width: 10rem;">
+            </div>
+            <div class="col-md-12">
+                <img src="{{ asset('/assets/img/success.png') }}" alt="Success"
+                    style="width: 7rem; height: 7rem; margin-top: 20px;">
+            </div>
         </div>
-        <div class="redirect-message">
-            If you are not automatically re-directed, please <a
-                href="https://www.flipkart.com/?affid=growthte&affExtParam1=CHKR20240519A304585692&affExtParam2=CHKR20240519A304585692">click
-                here</a>
-        </div>
+        <div class="header">Success! The Event Has Been Successfully Completed</div>
+        <div class="subheader">Thank you for participating in the event. Your involvement is invaluable to us and helps
+            us improve our future events.</div>
+        <div class="subheader">We appreciate your time and effort in making this event a success.</div>
     </div>
 </body>
 
