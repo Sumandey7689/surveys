@@ -303,31 +303,7 @@
 
         var chartData = [];
 
-        var data = {
-            "Provider 1": {
-                "item 1": 10,
-                "item 2": 35,
-                "item 3": 5,
-                "item 4": 20,
-                quantity: 430
-            },
-            "Provider 2": {
-                "item 1": 15,
-                "item 3": 21,
-                quantity: 210
-            },
-            "Provider 3": {
-                "item 2": 25,
-                "item 3": 11,
-                "item 4": 17,
-                quantity: 265
-            },
-            "Provider 4": {
-                "item 3": 12,
-                "item 4": 15,
-                quantity: 98
-            }
-        };
+        var data = <?php echo $chartData; ?>;
 
         for (var providerName in data) {
             var providerData = data[providerName];

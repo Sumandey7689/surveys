@@ -22,9 +22,31 @@ class DashboardController extends Controller
 
         $data['pendingLeads'] = DB::table('leads')->whereNotIn('status', ['Complete', 'Terminates', 'Quota Full'])->count();
         $data['activeProjects'] = DB::table('projects')->whereNot('status', 'Pause')->count();
-        $data['bodyView'] = view('admin/dashboard/dashboard_view', $data);
 
         $projectsChart = Projects::with('vendors')->get();
+
+        $formattedData = [];
+        foreach ($projectsChart as $project) {
+            $projectName = $project->name;
+            if (!isset($formattedData[$projectName])) {
+                $formattedData[$projectName] = [];
+            }
+
+            foreach ($project->vendors as $vendor) {
+                $vendorName = $vendor->name;
+                if (!isset($formattedData[$projectName][$vendorName])) {
+                    $formattedData[$projectName][$vendorName] = $vendor->clicks_count;
+                }
+            }
+
+            if(empty($formattedData[$projectName])) {
+                unset($formattedData[$projectName]);
+            }
+        }
+
+        $data['chartData'] = json_encode($formattedData, JSON_PRETTY_PRINT);
+
+        $data['bodyView'] = view('admin/dashboard/dashboard_view', $data);
         return LayoutController::loadAdmin($data);
     }
 
