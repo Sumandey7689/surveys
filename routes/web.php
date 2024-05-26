@@ -14,6 +14,7 @@ use App\Models\Admin\Menu;
 use Illuminate\Support\Facades\Schema;
 
 // Admin Routing
+Route::get('/', [AdminLoginController::class, 'index']);
 Route::get('admin', [AdminLoginController::class, 'index']);
 Route::post('admin/auth', [AdminLoginController::class, 'auth'])->name('admin.auth');
 Route::get('admin/logout', [AdminLoginController::class, 'logout'])->name('admin.logout');
