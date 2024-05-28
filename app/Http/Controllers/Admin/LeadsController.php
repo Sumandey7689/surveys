@@ -14,8 +14,7 @@ class LeadsController extends Controller
         $result["leadList"] =  DB::table('leads')
             ->join('projects', 'leads.project_id', '=', 'projects.id')
             ->join('vendor', 'vendor.id', '=', 'leads.vendor_id')
-            ->join('client', 'client.id', '=', 'leads.client_id')
-            ->select('leads.*', 'projects.project_id', 'projects.name as project_name', 'projects.cost_per_complete as cpi', 'client.client_name', 'vendor.email as vendor_email', 'vendor.id as vid')
+            ->select('leads.*', 'projects.project_id', 'projects.name as project_name', 'projects.cost_per_complete as cpi', 'vendor.email as vendor_email', 'vendor.id as vid')
             ->orderByDesc('leads.id')
             ->get();
 

@@ -30,7 +30,6 @@
                                 <th>Id</th>
                                 <th>Project Id</th>
                                 <th>Project Name</th>
-                                <th>Client</th>
                                 <th>Vendor</th>
                                 <th>CPI</th>
                                 <th class="text-center">Status</th>
@@ -46,7 +45,6 @@
                                     <td>{{ $lead->id }}</td>
                                     <td>{{ $lead->project_id }}</td>
                                     <td>{{ $lead->project_name }}</td>
-                                    <td>{{ $lead->client_name }}</td>
                                     <td><a href="{{ url('/') }}/admin/vendor/view/{{ $lead->vid }}"
                                             target="_blank">{{ $lead->vendor_email }}</a></td>
                                     <td><strong>${{ $lead->cpi }}</strong></td>
