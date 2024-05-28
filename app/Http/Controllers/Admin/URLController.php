@@ -7,7 +7,9 @@ use App\Models\admin\CommonDataModel;
 use App\Models\admin\Projects;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Jenssegers\Agent\Agent;
+use PhpParser\JsonDecoder;
 
 class URLController extends Controller
 {
@@ -17,9 +19,19 @@ class URLController extends Controller
             abort(404);
         }
 
+        
         $clientInfo = DB::table('client')->where('client_id', $clientId)->first();
         $username = $request->get('username');
         $leadsInfo = DB::table('leads')->where('id', $username)->first();
+
+
+        $userInfo = $this->getUserInfo($request);
+        if (strtolower($userInfo['country']) != "india") {
+            CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Terminates', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
+            return view('admin/url/terminates', []);
+        }
+
+
         if (empty($clientInfo) || empty($leadsInfo)) {
             abort(404);
         }
@@ -91,6 +103,10 @@ class URLController extends Controller
         $userId = $request->get('user');
         $userInfo = $this->getUserInfo($request);
 
+        if (strtolower($userInfo['country']) != "india") {
+            return view('admin/url/terminates', []);
+        }
+
         $projectsInfo = DB::table('projects')->where(['project_id' => $projectId, 'status' => 'Live'])->first();
         $vendorInfo = DB::table('vendor')->where(['id' => $vendorId, 'is_active' => 'Y'])->first();
 
@@ -120,19 +136,38 @@ class URLController extends Controller
     public function getUserInfo(Request $request)
     {
         $agent = new Agent();
-        $userAgent = $request->userAgent();
+        $ip = $request->ip();
+        $apiKey = '0F6A60C1B4EB021FD703558A61067E37';
+        $url = "https://api.ip2location.io/?key={$apiKey}&ip={$ip}";
 
-        $agent->setUserAgent($userAgent);
-
-        $userInfo = [
-            'user_agent' => [
-                'browser' => $agent->browser(),
-                'platform' => $agent->platform(),
-                'device' => $agent->device(),
-            ],
-            'ip_address' => $request->ip(),
-        ];
-
-        return $userInfo;
+        try {
+            $response = Http::get($url);
+            if ($response->successful()) {
+                $data = $response->json();
+                $userInfo = [
+                    'user_agent' => [
+                        'browser' => $agent->browser(),
+                        'platform' => $agent->platform(),
+                        'device' => $agent->device(),
+                    ],
+                    'ip_address' => $ip,
+                    'country' => $data['country_name'],
+                    'region' => $data['region_name'],
+                    'city' => $data['city_name'],
+                    'latitude' => $data['latitude'],
+                    'longitude' => $data['longitude'],
+                    'zip_code' => $data['zip_code'],
+                    'time_zone' => $data['time_zone'],
+                    'asn' => $data['asn'],
+                    'as' => $data['as'],
+                    'is_proxy' => $data['is_proxy'],
+                ];
+                return $userInfo;
+            } else {
+                return response()->json(['error' => 'Failed to retrieve geolocation information.']);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()]);
+        }
     }
 }

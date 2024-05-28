@@ -94,7 +94,7 @@ body {
 
 .Pending-status {
     color: white;
-    background-color: blue; /* Adjust color as needed */
+    background-color: orange; /* Adjust color as needed */
     font-weight: bold;
     padding: 5px 10px;
     border: none;
