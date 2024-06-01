@@ -19,7 +19,7 @@ class ProjectController extends Controller
             ->join('client', 'client.id', '=', 'projects.client_id')
             ->leftJoin('vendor', 'vendor.project_id', '=', 'projects.id')
             ->select('projects.*', 'client.client_name', DB::raw('SUM(vendor.complete_count) as complete_count, SUM(vendor.terminates_count) as terminates_count'))
-            ->groupBy('projects.id', 'projects.project_id', 'projects.client_id', 'projects.name', 'projects.description', 'projects.cost_per_complete', 'projects.max_limit', 'projects.live_url', 'projects.status', 'projects.date', 'client.client_name')
+            ->groupBy('projects.id', 'projects.project_id', 'projects.client_id', 'projects.name', 'projects.description', 'projects.cost_per_complete', 'projects.ir', 'projects.loi', 'projects.max_limit', 'projects.live_url', 'projects.status', 'projects.date', 'client.client_name')
             ->orderBy('projects.id', 'DESC')
             ->get();
 
@@ -48,6 +48,8 @@ class ProjectController extends Controller
         $client_id = $request->post('client_id');
         $name = $request->post('name');
         $cpi = $request->post('cost_per_complete');
+        $ir = $request->post('ir');
+        $loi = $request->post('loi');
         $max_limit = $request->post('max_limit');
         $live_url = $request->post('live_url');
         $description = $request->post('description');
@@ -56,6 +58,7 @@ class ProjectController extends Controller
             'client_id' => 'required',
             'name' => 'required',
             'cost_per_complete' => 'required',
+            'ir' => 'required',
             'max_limit' => 'required',
             'live_url' => ['required', 'url', new URLRules],
             'description' => 'required',
@@ -74,6 +77,8 @@ class ProjectController extends Controller
                     'client_id' => $client_id,
                     'name' => $name,
                     'cost_per_complete' => $cpi,
+                    'ir' => $ir,
+                    'loi' => $loi,
                     'max_limit' => $max_limit,
                     'live_url' => $live_url,
                     'description' => $description,
@@ -87,6 +92,8 @@ class ProjectController extends Controller
                 $dataArray = [
                     'name' => $name,
                     'cost_per_complete' => $cpi,
+                    'ir' => $ir,
+                    'loi' => $loi,
                     'max_limit' => $max_limit,
                     'live_url' => $live_url,
                     'description' => $description,
@@ -105,7 +112,7 @@ class ProjectController extends Controller
             ->join('client', 'client.id', '=', 'projects.client_id')
             ->leftJoin('vendor', 'vendor.project_id', '=', 'projects.id')
             ->select('projects.*', 'client.client_name', DB::raw('SUM(vendor.complete_count) as complete_count, SUM(vendor.terminates_count) as terminates_count, SUM(vendor.clicks_count) as clicks_count'))
-            ->groupBy('projects.id', 'projects.project_id', 'projects.client_id', 'projects.name', 'projects.description', 'projects.cost_per_complete', 'projects.max_limit', 'projects.live_url', 'projects.status', 'projects.date', 'client.client_name')
+            ->groupBy('projects.id', 'projects.project_id', 'projects.client_id', 'projects.name', 'projects.description', 'projects.cost_per_complete', 'projects.ir', 'projects.loi', 'projects.max_limit', 'projects.live_url', 'projects.status', 'projects.date', 'client.client_name')
             ->where('projects.id', $id)
             ->first();
 

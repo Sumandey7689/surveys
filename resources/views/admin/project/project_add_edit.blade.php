@@ -80,6 +80,26 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="" class="form-label">LOI (In minutes)</label>
+                                        <input class="form-control onlynumber" type="text" id="loi"
+                                            name="loi" placeholder="Enter Length of interview"
+                                            value="{{ $editData ? $editData->loi : '' }}" />
+                                        <div id="loi_error" class="invalid-feedback d-block error-text"></div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="" class="form-label">IR</label>
+                                        <input class="form-control numberwithdecimal" type="text" id="ir"
+                                            name="ir" placeholder="Enter IR"
+                                            value="{{ $editData ? $editData->ir : '' }}" />
+                                        <div id="ir_error" class="invalid-feedback d-block error-text"></div>
+                                    </div>
+                                </div>
+
                                 <div class="col-md-12">
                                     <div class="form-group mb-3">
                                         <label for="" class="form-label">Live URL</label>

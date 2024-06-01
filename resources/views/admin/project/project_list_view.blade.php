@@ -21,6 +21,8 @@
                                 <th>PID</th>
                                 <th class="text-center">Status</th>
                                 <th>CPI</th>
+                                <th>IR</th>
+                                <th>LOI</th>
                                 <th>Completes</th>
                                 <th>Terminates</th>
                                 <th class="text-center">Action</th>
@@ -35,6 +37,8 @@
                                     <td>{{ $project->project_id }}</td>
                                     <td><span class="{{ $project->status }}-status">{{ $project->status }}</span></td>
                                     <td>{{ $project->cost_per_complete }}</td>
+                                    <td>{{ $project->ir ?? 0 }}</td>
+                                    <td>{{ $project->loi }}</td>
                                     <td>{{ $project->complete_count ?? 0 }}</td>
                                     <td>{{ $project->terminates_count ?? 0 }}</td>
                                     <td>

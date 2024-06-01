@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\admin\CommonDataModel;
 use App\Models\admin\Projects;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Jenssegers\Agent\Agent;
-use PhpParser\JsonDecoder;
 
 class URLController extends Controller
 {
@@ -19,21 +19,26 @@ class URLController extends Controller
             abort(404);
         }
 
-        
-        $clientInfo = DB::table('client')->where('client_id', $clientId)->first();
+
         $username = $request->get('username');
         $leadsInfo = DB::table('leads')->where('id', $username)->first();
-
-
-        $userInfo = $this->getUserInfo($request);
-        if (strtolower($userInfo['country']) != "india") {
-            CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Terminates', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
-            return view('admin/url/terminates', []);
+        if (empty($leadsInfo)) {
+            abort(404);
         }
 
-
+        $clientInfo = DB::table('client')->join('projects', 'projects.client_id', '=', 'client.id')->where(['client.client_id' => $clientId, 'projects.id' => $leadsInfo->project_id])->first();
+        
         if (empty($clientInfo) || empty($leadsInfo)) {
             abort(404);
+        }
+
+        $leadDate = Carbon::parse($leadsInfo->date);
+        $loiInterval = $leadDate->copy()->addMinutes(intval($clientInfo->loi));
+
+        $userInfo = $this->getUserInfo($request);
+        if (strtolower($userInfo['country']) != "india" || Carbon::now()->lte($loiInterval)) {
+            CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Terminates', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
+            return view('admin/url/terminates', []);
         }
 
         if ($leadsInfo->status == "Pending") {
@@ -120,18 +125,36 @@ class URLController extends Controller
             return view('admin/url/quotafull', []);
         }
 
-        $existingLeads = DB::table('leads')->where(['project_id' => $projectsInfo->id, 'uid' => $userId, 'vendor_id' => $vendorId])->orderByDesc('id')->first();
-        if (empty($existingLeads) || json_decode($existingLeads->user_info)->ip_address != $userInfo['ip_address']) {
-            $insertedLeadsId = CommonDataModel::insertSingleTableData('leads', ['project_id' => $projectsInfo->id, 'vendor_id' => $vendorInfo->id, 'uid' => $userId, 'user_info' => json_encode($userInfo), 'date' => now()]);
-            DB::table('vendor')->where('id', $vendorId)->update(['clicks_count' => $vendorInfo->clicks_count + 1]);
+        $existingLeads = DB::table('leads')
+            ->where(['project_id' => $projectsInfo->id, 'vendor_id' => $vendorId])
+            ->whereRaw("JSON_EXTRACT(user_info, '$.ip_address') = ?", [$userInfo['ip_address']])
+            ->orderByDesc('id')
+            ->first();
+
+        if (empty($existingLeads)) {
+            $existingUsername = DB::table('leads')->where(['uid' => $userId, 'project_id' => $projectsInfo->id, 'vendor_id' => $vendorId])->orderByDesc('id')->first();
+            if (empty($existingUsername)) {
+                $insertedLeadsId = CommonDataModel::insertSingleTableData('leads', [
+                    'project_id' => $projectsInfo->id,
+                    'vendor_id' => $vendorInfo->id,
+                    'uid' => $userId,
+                    'user_info' => json_encode($userInfo),
+                    'date' => now()
+                ]);
+                DB::table('vendor')->where('id', $vendorId)->update(['clicks_count' => $vendorInfo->clicks_count + 1]);
+            } else {
+                return view('admin/url/terminates', []);
+            }
         } else {
+            if ($existingLeads->uid != $userId) {
+                return view('admin/url/terminates', []);
+            }
             $insertedLeadsId = $existingLeads->id;
         }
 
         $result['liveRedirectUrl'] = $projectsInfo->live_url . $insertedLeadsId;
         return view('admin/url/redirect', $result);
     }
-
 
     public function getUserInfo(Request $request)
     {

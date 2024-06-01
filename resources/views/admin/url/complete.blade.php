@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VHM Groups - Success</title>
+    <title>VMH Groups - Success</title>
     <style>
         * {
             margin: 0;
@@ -89,7 +89,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <img src="{{ asset('/assets/img/vhm.png') }}" alt="VHM Groups" style="height: 55px; width: 10rem;">
+                <img src="{{ asset('/assets/img/VMH.png') }}" alt="VMH Groups" style="height: 10rem; width: 10rem;">
             </div>
             <div class="col-md-12">
                 <img src="{{ asset('/assets/img/success.png') }}" alt="Success"
