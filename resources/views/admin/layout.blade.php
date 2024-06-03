@@ -93,6 +93,13 @@
                 display: none;
             }
         }
+
+        .brand-link {
+            font-size: 1.25rem;
+            line-height: 1.5;
+            white-space: nowrap;
+            height: 57px !important;
+        }
     </style>
 
 
@@ -161,8 +168,10 @@
 
             <!-- Brand Logo -->
             <a href="{{ url('/') }}dashboard" class="brand-link">
-                <span class="brand-text"><span class="brand-text-start">Admin </span><span
-                        class="brand-text-end">Panel</span></span>
+                {{-- <span class="brand-text"><span class="brand-text-start">Admin </span><span
+                        class="brand-text-end">Panel</span></span> --}}
+                <span class="brand-text"><img class="img-app"
+                        src="{{ asset('assets/') }}/app-assets/images/logo/app-logo.png" alt=""></span>
 
                 {{-- Admin Panel --}}
             </a>
@@ -302,13 +311,13 @@
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text)
-        .then(function() {
-            showToast('success', 'Link copied to clipboard');
-        })
-        .catch(function(error) {
-            console.error('Unable to copy to clipboard:', error);
-            showToast('error', 'Failed to copy link to clipboard');
-        });
+            .then(function() {
+                showToast('success', 'Link copied to clipboard');
+            })
+            .catch(function(error) {
+                console.error('Unable to copy to clipboard:', error);
+                showToast('error', 'Failed to copy link to clipboard');
+            });
     }
 </script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>

@@ -1,17 +1,26 @@
 <?php
 
 use App\Http\Controllers\Admin\ClientController;
-use App\Http\Controllers\admin\DashboardController;
-use App\Http\Controllers\admin\MenuController;
-use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\PaymentsController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\URLController;
 use App\Http\Controllers\Admin\VendorController;
-use App\Models\Admin\Menu;
+use App\Models\admin\Menu;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/clear-cache', function() {
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('route:clear');
+    Artisan::call('view:clear');
+    return "Cache is cleared";
+});
 
 // Admin Routing
 Route::get('/', [AdminLoginController::class, 'index']);
