@@ -36,8 +36,17 @@ class URLController extends Controller
         $loiInterval = $leadDate->copy()->addMinutes(intval($clientInfo->loi));
 
         $userInfo = $this->getUserInfo($request);
-        if (strtolower($userInfo['country']) != "india" || Carbon::now()->lte($loiInterval)) {
+        // if (strtolower($userInfo['country']) != "india" || Carbon::now()->lte($loiInterval)) {
+        //     $vendorInfo = DB::table('vendor')->where('id', $leadsInfo->vendor_id)->first();
+        //     CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Terminates', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
+        //     CommonDataModel::UpdateSingleTableData('vendor', ['terminates_count' => $vendorInfo->terminates_count + 1], ['id' => $vendorInfo->id]);
+        //     return view('admin/url/terminates', []);
+        // }
+        
+        if (Carbon::now()->lte($loiInterval)) {
+            $vendorInfo = DB::table('vendor')->where('id', $leadsInfo->vendor_id)->first();
             CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Terminates', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
+            CommonDataModel::UpdateSingleTableData('vendor', ['terminates_count' => $vendorInfo->terminates_count + 1], ['id' => $vendorInfo->id]);
             return view('admin/url/terminates', []);
         }
 
@@ -108,9 +117,9 @@ class URLController extends Controller
         $userId = $request->get('user');
         $userInfo = $this->getUserInfo($request);
 
-        if (strtolower($userInfo['country']) != "india") {
-            return view('admin/url/terminates', []);
-        }
+        // if (strtolower($userInfo['country']) != "india") {
+        //     return view('admin/url/terminates', []);
+        // }
 
         $projectsInfo = DB::table('projects')->where(['project_id' => $projectId, 'status' => 'Live'])->first();
         $vendorInfo = DB::table('vendor')->where(['id' => $vendorId, 'is_active' => 'Y'])->first();

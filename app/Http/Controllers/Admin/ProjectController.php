@@ -60,7 +60,7 @@ class ProjectController extends Controller
             'cost_per_complete' => 'required',
             'ir' => 'required',
             'max_limit' => 'required',
-            'live_url' => ['required', 'url', new URLRules],
+            'live_url' => ['required', 'url'],
             'description' => 'required',
         ], [
             'cost_per_complete.required' => 'CPI field required'
