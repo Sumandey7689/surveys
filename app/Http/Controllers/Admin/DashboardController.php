@@ -35,7 +35,7 @@ class DashboardController extends Controller
             foreach ($project->vendors as $vendor) {
                 $vendorName = $vendor->name;
                 if (!isset($formattedData[$projectName][$vendorName])) {
-                    $formattedData[$projectName][$vendorName] = $vendor->clicks_count;
+                    $formattedData[$projectName][$vendorName] = (int) $vendor->clicks_count;
                 }
             }
 
@@ -45,6 +45,7 @@ class DashboardController extends Controller
         }
 
         $data['chartData'] = json_encode($formattedData, JSON_PRETTY_PRINT);
+        // pre($formattedData);exit;
 
         $data['bodyView'] = view('admin/dashboard/dashboard_view', $data);
         return LayoutController::loadAdmin($data);

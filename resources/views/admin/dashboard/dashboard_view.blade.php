@@ -352,7 +352,10 @@
                 text: tempArray[0].provider,
                 dy: 30,
                 fontWeight: "bold",
-                tooltipText: tempArray[0].provider
+                tooltipText: tempArray[0].provider,
+                rotation: -90,
+                centerY: am5.p50,
+                centerX: am5.p100,
             });
 
             var tick = range.get("tick");
