@@ -124,7 +124,7 @@ class URLController extends Controller
             'uid' => $username,
             'pid' => $clientInfo->project_id,
             'ip' => $userInfo['ip_address'],
-            'status' => 'Quota Full',
+            'status' => 'Quota exceeded',
         ];
         
         return view('admin/url/quotafull', $data);
@@ -152,8 +152,15 @@ class URLController extends Controller
 
         $isMaxQuotaReached = Projects::getEventCounts($projectsInfo->id);
 
+        $userHitInfo = [
+            'uid' => "",
+            'pid' => $projectsInfo->project_id,
+            'ip' => $userInfo['ip_address']
+        ];
+
         if ($isMaxQuotaReached->complete_count > $isMaxQuotaReached->max_limit) {
-            return view('admin/url/quotafull', []);
+            $data['userHitInfo'] = array_merge($userHitInfo, ['status' => 'Quota exceeded']);
+            return view('admin/url/quotafull', $data);
         }
 
         $existingLeads = DB::table('leads')
@@ -174,11 +181,13 @@ class URLController extends Controller
                 ]);
                 DB::table('vendor')->where('id', $vendorId)->update(['clicks_count' => $vendorInfo->clicks_count + 1]);
             } else {
-                return view('admin/url/terminates', []);
+                $data['userHitInfo'] = array_merge($userHitInfo, ['status' => 'Terminated']);
+                return view('admin/url/terminates', $data);
             }
         } else {
             if ($existingLeads->uid != $userId) {
-                return view('admin/url/terminates', []);
+                $data['userHitInfo'] = array_merge($userHitInfo, ['status' => 'Terminated']);
+                return view('admin/url/terminates', $data);
             }
             $insertedLeadsId = $existingLeads->id;
         }
