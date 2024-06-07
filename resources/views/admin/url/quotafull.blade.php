@@ -63,6 +63,8 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 </head>
 
 <body>
@@ -80,6 +82,27 @@
         <div class="subheader">Thank you for your interest in participating. Unfortunately, the quota for this event has
             been reached.</div>
         <div class="subheader">We appreciate your willingness to join and hope you'll participate in future events.
+        </div>
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center"><strong>Uid</strong></th>
+                        <th scope="col" class="text-center"><strong>Pid</strong></th>
+                        <th scope="col" class="text-center"><strong>Ip</strong></th>
+                        <th scope="col" class="text-center"><strong>Status</strong></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>{{ $userHitInfo['uid'] }}</strong></td>
+                        <td><strong>{{ $userHitInfo['pid'] }}</strong></td>
+                        <td><strong>{{ $userHitInfo['ip'] }}</strong></td>
+                        <td><strong>{{ $userHitInfo['status'] }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </body>

@@ -21,6 +21,7 @@ class URLController extends Controller
 
 
         $username = $request->get('username');
+
         $leadsInfo = DB::table('leads')->where('id', $username)->first();
         if (empty($leadsInfo)) {
             abort(404);
@@ -42,12 +43,18 @@ class URLController extends Controller
         //     CommonDataModel::UpdateSingleTableData('vendor', ['terminates_count' => $vendorInfo->terminates_count + 1], ['id' => $vendorInfo->id]);
         //     return view('admin/url/terminates', []);
         // }
+        $userHitInfo = [
+            'uid' => $username,
+            'pid' => $clientInfo->project_id,
+            'ip' => $userInfo['ip_address']
+        ];
         
-        if (Carbon::now()->lte($loiInterval)) {
+        if (Carbon::now()->lte($loiInterval) || $leadDate->status != "Pending" && $leadDate->status != "Complete") {
             $vendorInfo = DB::table('vendor')->where('id', $leadsInfo->vendor_id)->first();
             CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Terminates', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
             CommonDataModel::UpdateSingleTableData('vendor', ['terminates_count' => $vendorInfo->terminates_count + 1], ['id' => $vendorInfo->id]);
-            return view('admin/url/terminates', []);
+            $data['userHitInfo'] = array_merge($userHitInfo, ['status' => 'Terminated']);
+            return view('admin/url/terminates', $data);
         }
 
         if ($leadsInfo->status == "Pending") {
@@ -65,6 +72,8 @@ class URLController extends Controller
             CommonDataModel::UpdateSingleTableData('payments', ['amount' => $paymentInfo->amount + $paymentInfo->cpi], ['vendor_id' => $vendorInfo->id, 'project_id' => $vendorInfo->project_id], $paymentInfo->id);
             CommonDataModel::UpdateSingleTableData('vendor', ['complete_count' => $vendorInfo->complete_count + 1], ['id' => $vendorInfo->id]);
         }
+
+        $data['userHitInfo'] = array_merge($userHitInfo, ['status' => 'Completed']);
         return view('admin/url/complete', []);
     }
 
@@ -86,7 +95,13 @@ class URLController extends Controller
             $vendorInfo = DB::table('vendor')->where('id', $leadsInfo->vendor_id)->first();
             CommonDataModel::UpdateSingleTableData('vendor', ['terminates_count' => $vendorInfo->terminates_count + 1], ['id' => $vendorInfo->id]);
         }
-        return view('admin/url/terminates', []);
+        $data['userHitInfo'] = [
+            'uid' => $username,
+            'pid' => $clientInfo->project_id,
+            'ip' => $userInfo['ip_address'],
+            'status' => 'Terminated'
+        ];
+        return view('admin/url/terminates', $data);
     }
 
     public function quotafullAction(Request $request, $clientId)
@@ -105,7 +120,14 @@ class URLController extends Controller
         if ($leadsInfo->status == "Pending") {
             CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Quota Full', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
         }
-        return view('admin/url/quotafull', []);
+        $data['userHitInfo'] = [
+            'uid' => $username,
+            'pid' => $clientInfo->project_id,
+            'ip' => $userInfo['ip_address'],
+            'status' => 'Quota Full',
+        ];
+        
+        return view('admin/url/quotafull', $data);
     }
 
     public function URLAction(Request $request, $vendorId, $projectId)
