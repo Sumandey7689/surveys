@@ -44,12 +44,12 @@ class URLController extends Controller
         //     return view('admin/url/terminates', []);
         // }
         $userHitInfo = [
-            'uid' => $username,
+            'uid' => $leadsInfo->uid,
             'pid' => $clientInfo->project_id,
             'ip' => $userInfo['ip_address']
         ];
         
-        if (Carbon::now()->lte($loiInterval) || $leadDate->status != "Pending" && $leadDate->status != "Complete") {
+        if (Carbon::now()->lte($loiInterval) || $leadsInfo->status != "Pending" && $leadsInfo->status != "Complete") {
             $vendorInfo = DB::table('vendor')->where('id', $leadsInfo->vendor_id)->first();
             CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Terminates', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
             CommonDataModel::UpdateSingleTableData('vendor', ['terminates_count' => $vendorInfo->terminates_count + 1], ['id' => $vendorInfo->id]);
@@ -89,15 +89,15 @@ class URLController extends Controller
         if (empty($clientInfo) || empty($leadsInfo)) {
             abort(404);
         }
-
+        $userInfo = $this->getUserInfo($request);
         if ($leadsInfo->status == "Pending") {
             CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Terminates', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
             $vendorInfo = DB::table('vendor')->where('id', $leadsInfo->vendor_id)->first();
             CommonDataModel::UpdateSingleTableData('vendor', ['terminates_count' => $vendorInfo->terminates_count + 1], ['id' => $vendorInfo->id]);
         }
         $data['userHitInfo'] = [
-            'uid' => $username,
-            'pid' => $clientInfo->project_id,
+            'uid' => $leadsInfo->uid,
+            'pid' => $leadsInfo->project_id,
             'ip' => $userInfo['ip_address'],
             'status' => 'Terminated'
         ];
@@ -120,9 +120,10 @@ class URLController extends Controller
         if ($leadsInfo->status == "Pending") {
             CommonDataModel::UpdateSingleTableData('leads', ['status' => 'Quota Full', 'client_id' => $clientInfo->id], ['id' => $leadsInfo->id], $leadsInfo->id);
         }
+        $userInfo = $this->getUserInfo($request);
         $data['userHitInfo'] = [
-            'uid' => $username,
-            'pid' => $clientInfo->project_id,
+            'uid' => $leadsInfo->uid,
+            'pid' => $leadsInfo->project_id,
             'ip' => $userInfo['ip_address'],
             'status' => 'Quota exceeded',
         ];
