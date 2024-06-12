@@ -74,7 +74,7 @@ class URLController extends Controller
         }
 
         $data['userHitInfo'] = array_merge($userHitInfo, ['status' => 'Completed']);
-        return view('admin/url/complete', []);
+        return view('admin/url/complete', $data);
     }
 
     public function terminateAction(Request $request, $clientId)
@@ -83,7 +83,7 @@ class URLController extends Controller
             abort(404);
         }
 
-        $clientInfo = DB::table('client')->where('client_id', $clientId)->first();
+        $clientInfo = DB::table('client')->join('projects', 'projects.client_id', '=', 'client.id')->where(['client.client_id' => $clientId])->first();
         $username = $request->get('username');
         $leadsInfo = DB::table('leads')->where('id', $username)->first();
         if (empty($clientInfo) || empty($leadsInfo)) {
@@ -97,7 +97,7 @@ class URLController extends Controller
         }
         $data['userHitInfo'] = [
             'uid' => $leadsInfo->uid,
-            'pid' => $leadsInfo->project_id,
+            'pid' => $clientInfo->project_id,
             'ip' => $userInfo['ip_address'],
             'status' => 'Terminated'
         ];
@@ -110,7 +110,7 @@ class URLController extends Controller
             abort(404);
         }
 
-        $clientInfo = DB::table('client')->where('client_id', $clientId)->first();
+        $clientInfo = DB::table('client')->join('projects', 'projects.client_id', '=', 'client.id')->where(['client.client_id' => $clientId])->first();
         $username = $request->get('username');
         $leadsInfo = DB::table('leads')->where('id', $username)->first();
         if (empty($clientInfo) || empty($leadsInfo)) {
@@ -123,7 +123,7 @@ class URLController extends Controller
         $userInfo = $this->getUserInfo($request);
         $data['userHitInfo'] = [
             'uid' => $leadsInfo->uid,
-            'pid' => $leadsInfo->project_id,
+            'pid' => $clientInfo->project_id,
             'ip' => $userInfo['ip_address'],
             'status' => 'Quota exceeded',
         ];
@@ -154,7 +154,7 @@ class URLController extends Controller
         $isMaxQuotaReached = Projects::getEventCounts($projectsInfo->id);
 
         $userHitInfo = [
-            'uid' => "",
+            'uid' => $userId,
             'pid' => $projectsInfo->project_id,
             'ip' => $userInfo['ip_address']
         ];
