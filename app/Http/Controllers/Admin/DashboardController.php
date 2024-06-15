@@ -19,6 +19,7 @@ class DashboardController extends Controller
         $data['pendingPayments'] = DB::table('payments')
             ->whereNotIn('status', ['Rejected', 'Paid'])
             ->sum('amount');
+        $data['totalClick'] = DB::table('leads')->count();
 
         $data['pendingLeads'] = DB::table('leads')->whereNotIn('status', ['Complete', 'Terminates', 'Quota Full'])->count();
         $data['activeProjects'] = DB::table('projects')->whereNot('status', 'Pause')->count();

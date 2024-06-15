@@ -30,7 +30,7 @@
                                 <th>Id</th>
                                 <th>Project Id</th>
                                 <th>Project Name</th>
-                                <th>Vendor</th>
+                                {{-- <th>Vendor</th> --}}
                                 <th>CPI</th>
                                 <th class="text-center">Status</th>
                                 <th>UID</th>
@@ -45,14 +45,14 @@
                                     <td>{{ $lead->id }}</td>
                                     <td>{{ $lead->project_id }}</td>
                                     <td>{{ $lead->project_name }}</td>
-                                    <td><a href="{{ url('/') }}/admin/vendor/view/{{ $lead->vid }}"
-                                            target="_blank">{{ $lead->vendor_email }}</a></td>
+                                    {{-- <td><a href="{{ url('/') }}/admin/vendor/view/{{ $lead->vid }}"
+                                            target="_blank">{{ $lead->vendor_email }}</a></td> --}}
                                     <td><strong>${{ $lead->cpi }}</strong></td>
                                     <td><span
                                             class="text-center {{ str_replace(' ', '', $lead->status) }}-status">{{ $lead->status }}</span>
                                     </td>
                                     <td><strong>{{ $lead->uid }}</strong></td>
-                                    <td>{{ date('d-m-Y', strtotime($lead->date)) }}</td>
+                                    <td>{{ $lead->date }}</td>
                                     <td>{{ json_decode($lead->user_info)->ip_address }}</td>
                                 </tr>
                             @endforeach
