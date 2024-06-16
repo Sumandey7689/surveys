@@ -31,7 +31,7 @@
                                 <th>Project Id</th>
                                 <th>Project Name</th>
                                 {{-- <th>Vendor</th> --}}
-                                <th>CPI</th>
+                                {{-- <th>CPI</th> --}}
                                 <th class="text-center">Status</th>
                                 <th>UID</th>
                                 <th>Date</th>
@@ -47,7 +47,7 @@
                                     <td>{{ $lead->project_name }}</td>
                                     {{-- <td><a href="{{ url('/') }}/admin/vendor/view/{{ $lead->vid }}"
                                             target="_blank">{{ $lead->vendor_email }}</a></td> --}}
-                                    <td><strong>${{ $lead->cpi }}</strong></td>
+                                    {{-- <td><strong>${{ $lead->cpi }}</strong></td> --}}
                                     <td><span
                                             class="text-center {{ str_replace(' ', '', $lead->status) }}-status">{{ $lead->status }}</span>
                                     </td>
